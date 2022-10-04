@@ -89,5 +89,42 @@ enum ReportCommand {
 
 fn main() {
     let args = Cli::parse();
-    println!("{:?}", args);
+
+    match args.command {
+        Command::Project(command) => handle_project(command.project_command),
+        Command::Task(command) => handle_task(command.task_command),
+        Command::Report(command) => handle_report(command.report_command),
+    }
+}
+
+fn handle_project(command: ProjectCommand) {
+    match command {
+        ProjectCommand::List => println!("Listing projects"),
+        ProjectCommand::Start => println!("Starting a new project"),
+        ProjectCommand::Stop { id } => println!("Stopping project with id {}", id),
+        ProjectCommand::Get { id } => println!("Getting details of project with id {}", id),
+        ProjectCommand::Select { id } => println!("Selecting project with id {}", id),
+    }
+}
+
+fn handle_task(command: TaskCommand) {
+    match command {
+        TaskCommand::List => println!("Listing tasks"),
+        TaskCommand::Add { name, end_time } => {
+            println!(
+                "Adding a new task with name {} and end time {}",
+                name,
+                end_time.unwrap_or("None".to_string())
+            )
+        }
+        TaskCommand::Complete { id } => println!("Completing task with id {}", id),
+    }
+}
+
+fn handle_report(command: ReportCommand) {
+    match command {
+        ReportCommand::Daily => println!("Showing tasks for today"),
+        ReportCommand::Rusted => println!("Showing projects that is about to be rusted"),
+        ReportCommand::All => println!("Showing all tasks to be done"),
+    }
 }
